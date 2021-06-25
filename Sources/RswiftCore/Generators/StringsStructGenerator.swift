@@ -258,9 +258,9 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
 
           /// Lokalise support
           let lokaliseValue = Lokalise.shared.localizedString(
-            forKey: \(values.key.escapedStringLiteral),
+            forKey: "\(values.key.escapedStringLiteral)",
             value: rSwiftValue,
-            table: \(values.tableName)
+            table: "\(values.tableName)"
           )
 
           guard !lokaliseValue.isEmpty else {
@@ -271,29 +271,16 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
         }
 
         guard let (_, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          let rSwiftValue = "\(values.key.escapedStringLiteral)"
-
-          /// Lokalise support
-          let lokaliseValue = Lokalise.shared.localizedString(
-            forKey: \(values.key.escapedStringLiteral),
-            value: rSwiftValue,
-            table: \(values.tableName)
-          )
-
-          guard !lokaliseValue.isEmpty else {
-            return rSwiftValue
-          }
-
-          return lokaliseValue
+          return "\(values.key.escapedStringLiteral)"
         }
 
         let rSwiftValue =  \(values.swiftCode(bundle: "bundle"))
 
         /// Lokalise support
         let lokaliseValue = Lokalise.shared.localizedString(
-          forKey: \(values.key.escapedStringLiteral),
+          forKey: "\(values.key.escapedStringLiteral)",
           value: rSwiftValue,
-          table: \(values.tableName)
+          table: "\(values.tableName)"
         )
 
         guard !lokaliseValue.isEmpty else {
@@ -343,9 +330,9 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
 
           /// Lokalise support
           let lokaliseFormat = Lokalise.shared.localizedString(
-            forKey: \(values.key.escapedStringLiteral),
+            forKey: "\(values.key.escapedStringLiteral)",
             value: defaultFormat,
-            table: \(values.tableName)
+            table: "\(values.tableName)"
           )
 
           if result.isEmpty {
