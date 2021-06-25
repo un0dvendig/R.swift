@@ -254,14 +254,53 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       returnType: Type._String,
       body: """
         guard let preferredLanguages = preferredLanguages else {
-          return \(values.swiftCode(bundle: "hostingBundle"))
+          let rSwiftValue = \(values.swiftCode(bundle: "hostingBundle"))
+
+          /// Lokalise support
+          let lokaliseValue = Lokalise.shared.localizedString(
+            forKey: \(values.key.escapedStringLiteral),
+            value: rSwiftValue,
+            table: \(values.tableName)
+          )
+
+          guard !lokaliseValue.isEmpty else {
+            return rSwiftValue
+          }
+
+          return lokaliseValue
         }
 
         guard let (_, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
+          let rSwiftValue = "\(values.key.escapedStringLiteral)"
+
+          /// Lokalise support
+          let lokaliseValue = Lokalise.shared.localizedString(
+            forKey: \(values.key.escapedStringLiteral),
+            value: rSwiftValue,
+            table: \(values.tableName)
+          )
+
+          guard !lokaliseValue.isEmpty else {
+            return rSwiftValue
+          }
+
+          return lokaliseValue
         }
 
-        return \(values.swiftCode(bundle: "bundle"))
+        let rSwiftValue =  \(values.swiftCode(bundle: "bundle"))
+
+        /// Lokalise support
+        let lokaliseValue = Lokalise.shared.localizedString(
+          forKey: \(values.key.escapedStringLiteral),
+          value: rSwiftValue,
+          table: \(values.tableName)
+        )
+
+        guard !lokaliseValue.isEmpty else {
+          return rSwiftValue
+        }
+
+        return lokaliseValue
         """,
       os: []
     )
@@ -298,7 +337,23 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       returnType: Type._String,
       body: """
         guard let preferredLanguages = preferredLanguages else {
-          let format = \(values.swiftCode(bundle: "hostingBundle"))
+          let format: String
+
+          let rSwiftFormat = \(values.swiftCode(bundle: "hostingBundle"))
+
+          /// Lokalise support
+          let lokaliseFormat = Lokalise.shared.localizedString(
+            forKey: \(values.key.escapedStringLiteral),
+            value: defaultFormat,
+            table: \(values.tableName)
+          )
+
+          if result.isEmpty {
+            format = rSwiftFormat
+          } else {
+            format = lokaliseFormat
+          }
+
           return String(format: format, locale: applicationLocale, \(args))
         }
 
