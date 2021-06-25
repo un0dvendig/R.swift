@@ -331,11 +331,11 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
           /// Lokalise support
           let lokaliseFormat = Lokalise.shared.localizedString(
             forKey: "\(values.key.escapedStringLiteral)",
-            value: defaultFormat,
+            value: rSwiftFormat,
             table: "\(values.tableName)"
           )
 
-          if result.isEmpty {
+          if lokaliseFormat.isEmpty {
             format = rSwiftFormat
           } else {
             format = lokaliseFormat
