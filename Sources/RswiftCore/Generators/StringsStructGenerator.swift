@@ -348,7 +348,22 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
           return "\(values.key.escapedStringLiteral)"
         }
 
-        let format = \(values.swiftCode(bundle: "bundle"))
+        let format: String
+
+        let rSwiftFormat = \(values.swiftCode(bundle: "bundle"))
+        /// Lokalise support
+        let lokaliseFormat = Lokalise.shared.localizedString(
+          forKey: "\(values.key.escapedStringLiteral)",
+          value: rSwiftFormat,
+          table: "\(values.tableName)"
+        )
+
+        if lokaliseFormat.isEmpty {
+          format = rSwiftFormat
+        } else {
+          format = lokaliseFormat
+        }
+
         return String(format: format, locale: locale, \(args))
         """,
       os: []
